@@ -63,13 +63,9 @@ class MainActivity : AppCompatActivity(), OnConnectionFailedListener {
             .addApi(Auth.GOOGLE_SIGN_IN_API)
             .build()
 
-        // Initalize Firebase Analyitics .. logs clicking on the send button
+        // Initialize Firebase Analytics
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, R.id.sendButton.toString())
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Send button")
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+
         // Initialize Firebase Auth
         mFirebaseAuth = getInstance()
         mFirebaseUser = mFirebaseAuth.currentUser
@@ -222,6 +218,10 @@ class MainActivity : AppCompatActivity(), OnConnectionFailedListener {
             mFirebaseDatabaseReference.child(MESSAGES_CHILD)
                 .push().setValue(friendlyMessage)
             messageEditText.setText("")
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Send button")
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
         }
 
         addMessageImageView.setOnClickListener {

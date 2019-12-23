@@ -12,6 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_sign_in.*
@@ -23,6 +24,7 @@ class SignInActivity : AppCompatActivity(), OnConnectionFailedListener,
     private var mGoogleApiClient: GoogleApiClient? = null
     // Firebase instance variables
     private lateinit var mFirebaseAuth: FirebaseAuth
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +32,9 @@ class SignInActivity : AppCompatActivity(), OnConnectionFailedListener,
 
         // Initialize FirebaseAuth
         mFirebaseAuth = FirebaseAuth.getInstance()
+
+        // Initialize Firebase Analytics
+         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         // Assign fields
         signInButton.setOnClickListener(this)
@@ -103,6 +108,7 @@ class SignInActivity : AppCompatActivity(), OnConnectionFailedListener,
                 } else {
                     startActivity(Intent(this@SignInActivity, MainActivity::class.java))
                     finish()
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, null)
                 }
             }
     }
